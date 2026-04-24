@@ -1,8 +1,9 @@
-create table products (
-                          id int NOT NULL AUTO_INCREMENT,
-                          code varchar(255) not null,
-                          name varchar(255) not null,
-                          price numeric(5,2) not null,
-                          PRIMARY KEY (id),
+CREATE TABLE products (
+                          id INT AUTO_INCREMENT PRIMARY KEY,
+                          code VARCHAR(50) NOT NULL,
+                          name VARCHAR(150) NOT NULL,
+                          price DECIMAL(10,2) NOT NULL,
+                          created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                          updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                           UNIQUE (code)
 );

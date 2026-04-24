@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Optional<Product> findByCode(String code);
 
     @Modifying
     @Query("update Product p set p.price = :price where p.code = :productCode")

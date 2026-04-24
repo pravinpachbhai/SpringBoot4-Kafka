@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Setter
 @Getter
@@ -27,8 +28,24 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    @Column(nullable = false)
+    private LocalDateTime created;
+
+    @Column(nullable = false)
+    private LocalDateTime updated;
 
     public Product() {
 
+    }
+
+    @PrePersist
+    public void prePersist() {
+        created = LocalDateTime.now();
+        updated = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        updated= LocalDateTime.now();
     }
 }
