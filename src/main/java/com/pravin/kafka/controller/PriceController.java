@@ -1,18 +1,16 @@
 package com.pravin.kafka.controller;
 
-import com.google.gson.Gson;
 import com.pravin.kafka.component.KafkaProducer;
 import com.pravin.kafka.dto.ProductPrice;
+import com.pravin.kafka.entity.Product;
 import com.pravin.kafka.service.ProductService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
-import com.pravin.kafka.dto.ProductPrice;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
-import com.pravin.kafka.entity.Product;
 
 import java.util.List;
 
@@ -22,7 +20,6 @@ import java.util.List;
 public class PriceController {
 
     private static final Logger log = LoggerFactory.getLogger(PriceController.class);
-
     private final ProductService productService;
     private final KafkaProducer kafkaProducer;
     public PriceController(KafkaProducer kafkaProducer, ProductService productService) {
@@ -32,9 +29,7 @@ public class PriceController {
 
     @PatchMapping()
      public ResponseEntity<String> updatePrice(@Valid @RequestBody ProductPrice productPrice) {
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(productPrice);
-        kafkaProducer.send("product-price-changes", jsonString);
+        kafkaProducer.send("product-price-changes", productPrice.productCode(), productPrice);
         return ResponseEntity.status(HttpStatus.OK).body("Price Updated");
     }
 
