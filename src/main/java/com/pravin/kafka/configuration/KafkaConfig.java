@@ -13,7 +13,6 @@ import java.util.Map;
 public class KafkaConfig {
 
     @Bean
-    @Profile("dev")
     public EmbeddedKafkaBroker broker() {
         return new EmbeddedKafkaKraftBroker(1, 1)
                 .kafkaPorts(9092)

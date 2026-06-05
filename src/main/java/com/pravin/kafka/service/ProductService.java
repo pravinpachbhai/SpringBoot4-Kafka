@@ -1,5 +1,6 @@
 package com.pravin.kafka.service;
 
+import com.pravin.kafka.component.KafkaProducer;
 import com.pravin.kafka.dto.ProductPrice;
 import com.pravin.kafka.entity.Product;
 import com.pravin.kafka.repository.ProductRepository;
@@ -13,10 +14,11 @@ import java.util.List;
 @Service
 public class ProductService {
     private static final Logger log = LoggerFactory.getLogger(ProductService.class);
-
+    private final KafkaProducer kafkaProducer;
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository){
+    public ProductService(KafkaProducer kafkaProducer, ProductRepository productRepository){
+        this.kafkaProducer = kafkaProducer;
         this.productRepository = productRepository;
     }
 
@@ -27,5 +29,6 @@ public class ProductService {
     @Transactional
     public void updateProductPrice(ProductPrice productPrice){
         productRepository.updateProductPrice(productPrice.productCode(), productPrice.price());
+        kafkaProducer.send("product-price-changes", productPrice.productCode(), productPrice);
     }
 }

@@ -1,6 +1,5 @@
 package com.pravin.kafka.controller;
 
-import com.pravin.kafka.component.KafkaProducer;
 import com.pravin.kafka.dto.ProductPrice;
 import com.pravin.kafka.entity.Product;
 import com.pravin.kafka.service.ProductService;
@@ -21,15 +20,14 @@ public class PriceController {
 
     private static final Logger log = LoggerFactory.getLogger(PriceController.class);
     private final ProductService productService;
-    private final KafkaProducer kafkaProducer;
-    public PriceController(KafkaProducer kafkaProducer, ProductService productService) {
-        this.kafkaProducer = kafkaProducer;
+
+    public PriceController(ProductService productService) {
+
         this.productService = productService;
     }
 
     @PatchMapping()
      public ResponseEntity<String> updatePrice(@Valid @RequestBody ProductPrice productPrice) {
-        kafkaProducer.send("product-price-changes", productPrice.productCode(), productPrice);
         return ResponseEntity.status(HttpStatus.OK).body("Price Updated");
     }
 
